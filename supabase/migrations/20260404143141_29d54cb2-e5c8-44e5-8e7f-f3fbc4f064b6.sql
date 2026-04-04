@@ -1,0 +1,1 @@
+ALTER TABLE public.dealers REPLICA IDENTITY FULL;
