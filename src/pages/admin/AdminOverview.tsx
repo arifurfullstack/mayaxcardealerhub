@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import { 
   Users, 
   Target, 
@@ -299,7 +300,7 @@ export default function AdminOverview() {
               <ShieldCheck className="h-4 w-4 text-emerald-500" />
               Recent Successful Purchases
             </h3>
-            <button className="text-[10px] font-bold text-amber-500/60 hover:text-amber-500 transition-colors uppercase tracking-widest">View All Orders</button>
+            <Link to="/admin/orders" className="text-[10px] font-bold text-amber-500/60 hover:text-amber-500 transition-colors uppercase tracking-widest">View All Orders</Link>
           </div>
           <div className="space-y-3">
             {recentPurchases.map((purchase) => (

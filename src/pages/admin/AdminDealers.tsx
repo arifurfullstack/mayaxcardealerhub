@@ -13,7 +13,8 @@ import {
   ArrowUpDown,
   Mail,
   Phone,
-  LayoutGrid
+  LayoutGrid,
+  User
 } from "lucide-react";
 import { supabase } from "@/integrations/supabase/client";
 import { 
@@ -95,7 +96,6 @@ export default function AdminDealers() {
       .from("dealers")
       .update({ 
         approval_status: status,
-        rejection_reason: reason || null,
         updated_at: new Date().toISOString()
       })
       .eq("id", dealerId);
@@ -121,8 +121,7 @@ export default function AdminDealers() {
       type: amountNum >= 0 ? "top_up" : "refund",
       amount: amountNum,
       balance_after: newBalance,
-      description: walletNote || (amountNum >= 0 ? "Admin manual top-up" : "Admin manual debit"),
-      created_by: "System Admin"
+      description: walletNote || (amountNum >= 0 ? "Admin manual top-up" : "Admin manual debit")
     });
 
     if (transError) {

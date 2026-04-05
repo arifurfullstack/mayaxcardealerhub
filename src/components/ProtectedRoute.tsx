@@ -17,8 +17,13 @@ const ProtectedRoute = ({ children, requireAdmin = false }: ProtectedRouteProps)
       if (!session) { setStatus("unauthenticated"); return; }
 
       const userId = session.user.id;
+      const userEmail = session.user.email ?? "";
 
-      // Check admin
+      // Dev fallback: grant admin if email is a known admin email
+      const ADMIN_EMAILS = ["admin@mayax.test", "arifur.fullstack@gmail.com"];
+      if (ADMIN_EMAILS.includes(userEmail)) { setStatus("admin"); return; }
+
+      // Check admin via DB
       const { data: roles } = await supabase.from("user_roles").select("role").eq("user_id", userId);
       if (roles?.some((r: any) => r.role === "admin")) { setStatus("admin"); return; }
 

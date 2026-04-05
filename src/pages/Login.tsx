@@ -17,9 +17,18 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
 
+    // Dev fallback: these emails always route to admin
+    const ADMIN_EMAILS = ["admin@mayax.test", "arifur.fullstack@gmail.com"];
+
     try {
       const { data, error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
+
+      // Short-circuit for known admin emails
+      if (ADMIN_EMAILS.includes(data.user.email ?? "")) {
+        navigate("/admin");
+        return;
+      }
 
       const { data: dealer } = await supabase
         .from("dealers")

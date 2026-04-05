@@ -2,6 +2,9 @@ import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { supabase } from "@/integrations/supabase/client";
 
+// Dev fallback: these emails always have admin access
+const ADMIN_EMAILS = ["admin@mayax.test", "arifur.fullstack@gmail.com"];
+
 const AdminRoute = ({ children }: { children: React.ReactNode }) => {
   const [status, setStatus] = useState<"loading" | "admin" | "denied">("loading");
 
@@ -9,6 +12,12 @@ const AdminRoute = ({ children }: { children: React.ReactNode }) => {
     const check = async () => {
       const { data: { session } } = await supabase.auth.getSession();
       if (!session) { setStatus("denied"); return; }
+
+      // Dev fallback: grant admin if email is in the known admin list
+      if (ADMIN_EMAILS.includes(session.user.email ?? "")) {
+        setStatus("admin");
+        return;
+      }
 
       const { data: roles } = await supabase
         .from("user_roles")
